@@ -1,0 +1,22 @@
+{
+  "productos_agrupados": [
+    {
+      "id": 37142,
+        "children": [
+            {
+                "id": 11409,
+                "cantidad": 4
+            }
+        ]
+    },
+  	{
+      "id": 8560,
+        "children": [
+            {
+                "id": 8591,
+                "cantidad": 2
+            }
+        ]
+    }
+  ]
+}
