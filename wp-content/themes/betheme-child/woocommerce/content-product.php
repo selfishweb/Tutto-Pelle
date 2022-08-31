@@ -202,26 +202,23 @@ if( $product->is_in_stock() && (! mfn_opts_get('shop-catalogue')) && (! in_array
 			if ($product->get_type() == "grouped") {
 
 			  if ( types_render_field( "contiene-cantidades-adicionales", array($product->get_id())) == 1 ){
-					 //$json = file_get_contents("https://tuttopelle.mx/wp-json/cantidad-productos-agrupados/v1/data");
-					 //$datacantidad = json_decode($json, true);
-					 $precios = array();
-					 $childrenx = $product->get_children();
-
-					 foreach ($productos_agrupados as $datarow) {
-						 if ( $product->get_id() == $datarow[0] && in_array($datarow[1], $childrenx) ) {
-							 //echo "si" . $product->get_id();
-							 foreach ($childrenx as $childy) {
-								 $childyz = wc_get_product($childy);
-								 if($childyz->get_id() == $datarow[1]){
-									 array_push($precios, $childyz->get_price()*$datarow[2]);
-								 }
-								 else{
-									 array_push($precios, $childyz->get_price());
-								 }
-							 }
-						 }
-					 }
-					 echo '<p class="desde">Desde: ' . wc_price( array_sum($precios)-1 ) . '</p>';
+					
+					$precios = array();
+					$childrenx = $product->get_children();
+					
+					$hijos = array_column($productos_agrupados, 1);
+					foreach($childrenx as $productohijo){
+						$childyz = wc_get_product($productohijo);
+						if(in_array($productohijo, $hijos)){
+							$indice = array_search($childyz->get_id(), $hijos);
+							array_push($precios, $childyz->get_price()*$productos_agrupados[$indice][2]);
+						}
+						else{
+							array_push($precios, $childyz->get_price());
+						}
+					}
+				
+					echo '<p class="desde">Desde: ' . wc_price( ceil(array_sum($precios))) . '</p>';
 				}
 				else{
 					$precios = array();
